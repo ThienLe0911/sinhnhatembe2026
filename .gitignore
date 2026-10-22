@@ -17,3 +17,6 @@ image/
 # Hệ điều hành và công cụ
 .DS_Store
 *.log
+
+# Worktree của các dev chạy song song (do công cụ tạo)
+.claude/worktrees/
