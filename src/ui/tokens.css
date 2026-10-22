@@ -1,0 +1,91 @@
+/* Token thiết kế (T09). Màu hex ở đây được src/ui/contrast.test.ts đọc để kiểm tra độ tương phản. */
+:root {
+  /* Nền và bề mặt */
+  --color-bg: #fff8ec;
+  --color-bg-deep: #ffecd9;
+  --color-surface: #fffdf8;
+  --color-line: #eadfd6;
+
+  /* Chữ */
+  --color-ink: #3b3340;
+  --color-ink-muted: #6b6172;
+  --color-ink-inverse: #ffffff;
+  --color-focus: #6a55cc;
+
+  /* Pastel */
+  --color-peach: #ffd9cf;
+  --color-peach-strong: #f2a193;
+  --color-lavender: #e4ddfb;
+  --color-lavender-strong: #b4a5ee;
+  --color-matcha: #d3e7c3;
+  --color-matcha-strong: #8fba7a;
+  --color-matcha-ink: #3f5f31;
+  --color-butter: #fbeab4;
+
+  /* Kim loại: hạng Bạc và hạng Vàng */
+  --color-silver-1: #f1f4f8;
+  --color-silver-2: #c9d1dc;
+  --color-silver-3: #98a4b5;
+  --color-gold-1: #fbe7a8;
+  --color-gold-2: #e9bb52;
+  --color-gold-3: #b98a1d;
+
+  --gradient-silver: linear-gradient(
+    135deg,
+    var(--color-silver-1),
+    var(--color-silver-2) 48%,
+    var(--color-silver-3)
+  );
+  --gradient-gold: linear-gradient(
+    135deg,
+    var(--color-gold-1),
+    var(--color-gold-2) 50%,
+    var(--color-gold-3)
+  );
+  --gradient-backdrop:
+    radial-gradient(60rem 40rem at 8% -8%, var(--color-peach) 0%, transparent 62%),
+    radial-gradient(50rem 36rem at 112% 12%, var(--color-lavender) 0%, transparent 56%),
+    radial-gradient(50rem 40rem at 50% 118%, var(--color-matcha) 0%, transparent 62%);
+
+  /* Chữ: phông tròn có sẵn trên iPhone (SF Rounded), hỗ trợ đủ dấu tiếng Việt */
+  --font-body:
+    ui-rounded, 'SF Pro Rounded', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-display:
+    ui-rounded, 'SF Pro Rounded', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+
+  --text-xs: 0.8125rem;
+  --text-sm: 0.9375rem;
+  --text-base: 1rem;
+  --text-lg: 1.25rem;
+  --text-xl: 1.625rem;
+  --text-2xl: 2.25rem;
+  --text-3xl: 3rem;
+
+  /* Bo góc */
+  --radius-sm: 12px;
+  --radius-md: 20px;
+  --radius-lg: 28px;
+  --radius-xl: 40px;
+  --radius-pill: 999px;
+
+  /* Khoảng cách */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+
+  /* Đổ bóng kiểu đất sét và kính */
+  --shadow-clay:
+    0 1px 0 rgb(255 255 255 / 0.9) inset, 0 -6px 12px -6px rgb(120 90 110 / 0.12) inset,
+    0 14px 28px -12px rgb(120 90 110 / 0.35);
+  --shadow-soft: 0 8px 24px -12px rgb(120 90 110 / 0.3);
+  --glass-bg: rgb(255 255 255 / 0.55);
+  --glass-border: rgb(255 255 255 / 0.75);
+
+  /* Hạt nhiễu rất nhẹ cho bề mặt */
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .24 0 0 0 0 .2 0 0 0 0 .25 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}

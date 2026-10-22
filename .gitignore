@@ -18,5 +18,5 @@ image/
 .DS_Store
 *.log
 
-# Worktree của các dev chạy song song (do công cụ tạo)
-.claude/worktrees/
+# Cấu hình công cụ và worktree của các dev chạy song song (do công cụ tạo)
+.claude/

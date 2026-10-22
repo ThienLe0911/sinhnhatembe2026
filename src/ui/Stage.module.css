@@ -1,0 +1,16 @@
+/* Khung dọc cho iPhone: tránh Dynamic Island và thanh Home bằng safe-area. */
+.stage {
+  min-height: 100dvh;
+  display: flex;
+  justify-content: center;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom)
+    env(safe-area-inset-left);
+}
+
+.frame {
+  width: 100%;
+  max-width: 30rem;
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-4);
+}
