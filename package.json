@@ -10,7 +10,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "lint": "eslint .",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "media": "node scripts/process-media.mjs"
   },
   "dependencies": {
     "canvas-confetti": "^1.9.4",
