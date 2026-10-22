@@ -1,0 +1,19 @@
+# Phụ thuộc và kết quả build
+node_modules/
+dist/
+coverage/
+*.tsbuildinfo
+
+# Vercel
+.vercel/
+
+# Môi trường
+.env
+.env.*
+
+# Ảnh gốc của chủ dự án (còn EXIF): chỉ là nguồn, không đưa vào git (BR-11)
+image/
+
+# Hệ điều hành và công cụ
+.DS_Store
+*.log
