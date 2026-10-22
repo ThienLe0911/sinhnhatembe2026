@@ -1,0 +1,72 @@
+.capsule {
+  --s: var(--capsule-size, 4rem);
+  position: relative;
+  width: var(--s);
+  height: var(--s);
+  filter: drop-shadow(0 8px 10px rgb(120 90 110 / 0.28));
+}
+
+.top,
+.bottom {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 50%;
+  background-size: 100% 200%;
+}
+
+.top {
+  top: 0;
+  border-radius: calc(var(--s) / 2) calc(var(--s) / 2) 0 0;
+  background-position: top;
+  transform-origin: 20% 100%;
+  z-index: 1;
+}
+
+.bottom {
+  bottom: 0;
+  border-radius: 0 0 calc(var(--s) / 2) calc(var(--s) / 2);
+  background-position: bottom;
+}
+
+/* Đường nối hai nửa */
+.top::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 3px;
+  background: rgb(59 51 64 / 0.2);
+}
+
+/* Vệt sáng trên nắp */
+.top::before {
+  content: '';
+  position: absolute;
+  top: 18%;
+  left: 16%;
+  width: 34%;
+  height: 34%;
+  border-radius: 50%;
+  background: rgb(255 255 255 / 0.65);
+  transform: rotate(-24deg);
+}
+
+.normal .top {
+  background-image: linear-gradient(var(--color-peach-strong), var(--color-peach-strong));
+}
+
+.normal .bottom {
+  background-image: linear-gradient(var(--color-lavender), var(--color-lavender));
+}
+
+.silver .top,
+.silver .bottom {
+  background-image: var(--gradient-silver);
+}
+
+.gold .top,
+.gold .bottom {
+  background-image: var(--gradient-gold);
+}

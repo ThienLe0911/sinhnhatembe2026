@@ -1,15 +1,24 @@
-import { lazy, Suspense } from 'react'
+import { lazy, Suspense, type ComponentType } from 'react'
 import { Stage } from './ui/Stage'
 
-// Style tile chỉ có ở môi trường phát triển (?tile), không vào bản build phát hành.
-const StyleTile = import.meta.env.DEV ? lazy(() => import('./dev/StyleTile')) : null
-const showTile = import.meta.env.DEV && new URLSearchParams(window.location.search).has('tile')
+// Các trang xem thử chỉ có ở môi trường phát triển (?tile, ?mascot), không vào bản build phát hành.
+const devPages: Record<string, ComponentType> = import.meta.env.DEV
+  ? {
+      tile: lazy(() => import('./dev/StyleTile')),
+      mascot: lazy(() => import('./dev/MascotSheet')),
+      machine: lazy(() => import('./dev/MachineSheet')),
+    }
+  : {}
+const devPage = import.meta.env.DEV
+  ? Object.keys(devPages).find((name) => new URLSearchParams(window.location.search).has(name))
+  : undefined
 
 export function App() {
-  if (StyleTile && showTile) {
+  if (devPage) {
+    const DevPage = devPages[devPage]
     return (
       <Suspense fallback={null}>
-        <StyleTile />
+        <DevPage />
       </Suspense>
     )
   }
