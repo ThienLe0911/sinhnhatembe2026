@@ -1,7 +1,7 @@
 .machine {
   position: relative;
   /* Vừa chiều rộng, vừa chiều cao còn lại của màn hình để máy không tràn */
-  width: min(100%, 22rem, calc((100dvh - 8rem) * 0.5));
+  width: min(100%, 22rem, calc((100dvh - var(--machine-reserve, 8rem)) * 0.5));
   aspect-ratio: 360 / 720;
   margin-inline: auto;
 }

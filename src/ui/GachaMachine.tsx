@@ -1,4 +1,5 @@
-import { useId, type CSSProperties, type HTMLAttributes, type ReactNode, type Ref } from 'react'
+import { motion, type HTMLMotionProps, type MotionValue } from 'motion/react'
+import { useId, type CSSProperties, type ReactNode, type Ref } from 'react'
 import styles from './GachaMachine.module.css'
 
 // Bản vẽ dùng hệ toạ độ 360 x 720; các lớp tương tác (núm, khe xu, khay, linh vật) là phần tử HTML
@@ -47,13 +48,13 @@ interface GachaMachineProps {
   // Nội dung nằm trong cửa nhận quà, thường là <Capsule />
   tray?: ReactNode
   // Góc xoay của núm, tính bằng độ; điều khiển được từ bên ngoài
-  knobAngle?: number
+  knobAngle?: number | MotionValue<number>
   // Các viên trong quả cầu lắc lư
   spinning?: boolean
   // Khe xu sáng lên để gợi ý chỗ thả xu
   coinSlotGlow?: boolean
   plaque?: string
-  knobProps?: HTMLAttributes<HTMLDivElement>
+  knobProps?: HTMLMotionProps<'div'>
   knobRef?: Ref<HTMLDivElement>
   coinSlotRef?: Ref<HTMLDivElement>
   trayRef?: Ref<HTMLDivElement>
@@ -326,7 +327,7 @@ export function GachaMachine({
         }}
       />
 
-      <div
+      <motion.div
         ref={knobRef}
         {...knobRest}
         className={[styles.knob, knobClass].filter(Boolean).join(' ')}
@@ -334,12 +335,12 @@ export function GachaMachine({
           left: pctX(KNOB.cx - KNOB.size / 2),
           top: pctY(KNOB.cy - KNOB.size / 2),
           width: pctX(KNOB.size),
-          transform: `rotate(${knobAngle}deg)`,
+          rotate: knobAngle,
           ...knobStyle,
         }}
       >
         <span className={styles.knobBar} />
-      </div>
+      </motion.div>
 
       <div
         ref={trayRef}

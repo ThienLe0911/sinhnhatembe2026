@@ -1,0 +1,46 @@
+.screen {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  --machine-reserve: 14rem;
+}
+
+.header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+}
+
+.count {
+  font-family: var(--font-display);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--color-ink-muted);
+}
+
+.count strong {
+  color: var(--color-ink);
+  font-size: var(--text-base);
+}
+
+.machine {
+  flex: none;
+}
+
+.trayCapsule {
+  cursor: pointer;
+  touch-action: manipulation;
+  /* Vòng chạm đủ lớn, hơn kích thước viên capsule */
+  padding: var(--space-2);
+}
+
+.hint {
+  min-height: 1.5em;
+  text-align: center;
+  font-family: var(--font-display);
+  font-weight: 600;
+  color: var(--color-ink-muted);
+}

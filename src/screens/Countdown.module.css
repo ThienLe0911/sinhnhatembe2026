@@ -1,0 +1,94 @@
+.screen {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-5);
+  padding-block: var(--space-5);
+  text-align: center;
+}
+
+.mascot {
+  width: min(58%, 14rem);
+  position: relative;
+}
+
+/* Bóng đổ dưới chân linh vật */
+.mascot::after {
+  content: '';
+  position: absolute;
+  left: 12%;
+  right: 12%;
+  bottom: -6px;
+  height: 14px;
+  border-radius: 50%;
+  background: rgb(59 51 64 / 0.1);
+  filter: blur(4px);
+  z-index: -1;
+}
+
+.copy {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  max-width: 22rem;
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  line-height: 1.15;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+.body {
+  color: var(--color-ink-muted);
+}
+
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-2);
+  width: 100%;
+}
+
+.tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: var(--space-3) var(--space-1);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-clay);
+}
+
+.number {
+  display: grid;
+  place-items: center;
+  height: 1.2em;
+  overflow: hidden;
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  font-weight: 800;
+  line-height: 1.2;
+  font-variant-numeric: tabular-nums;
+}
+
+.digit {
+  grid-area: 1 / 1;
+}
+
+.label {
+  font-size: var(--text-xs);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-ink-muted);
+}
+
+.when {
+  font-size: var(--text-sm);
+  color: var(--color-ink-muted);
+}
