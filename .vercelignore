@@ -2,3 +2,5 @@ image
 docs
 node_modules
 .git
+.claude
+.env*
