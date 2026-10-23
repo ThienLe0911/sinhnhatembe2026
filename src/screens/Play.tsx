@@ -3,6 +3,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { content } from '../content/content'
 import { getAudioManager } from '../lib/audio'
 import { preloadCardMedia } from '../lib/preload'
+import { useReducedMotionPref } from '../lib/reduced-motion'
 import { canDrop, getProgress, getSpinsUntilGold, isGoldAvailable } from '../state/game'
 import { useGameState, useGameStore } from '../state/GameProvider'
 import { Capsule } from '../ui/Capsule'
@@ -26,6 +27,7 @@ export function Play() {
   const state = useGameState()
   const audio = getAudioManager()
   const angle = useMotionValue(0)
+  const reduced = useReducedMotionPref()
   const [phase, setPhase] = useState<Phase>('idle')
   const openTimer = useRef<number | undefined>(undefined)
 
@@ -54,6 +56,7 @@ export function Play() {
     onSpinEnd,
     onTick,
     label: KNOB_LABEL,
+    reduced,
   })
 
   const openCapsule = useCallback(() => {
@@ -91,7 +94,13 @@ export function Play() {
     <Stage>
       <div className={styles.screen} onPointerUpCapture={() => void audio.unlock()}>
         <header className={styles.header}>
-          <p className={styles.count}>
+          <button
+            type="button"
+            className={styles.count}
+            disabled={progress.opened === 0}
+            aria-label={`Mở album, đã sưu tập ${progress.opened} trên ${progress.total} thẻ`}
+            onClick={() => store.dispatch({ type: 'OPEN_ALBUM' })}
+          >
             Đã sưu tập{' '}
             <motion.strong
               key={progress.opened}
@@ -103,7 +112,8 @@ export function Play() {
               {progress.opened}
             </motion.strong>
             /{progress.total}
-          </p>
+            {progress.opened > 0 ? <span aria-hidden="true"> · Album ›</span> : null}
+          </button>
           <span className={styles.gold} data-ready={goldReady}>
             <span className={styles.goldDot} aria-hidden="true" />
             {goldReady ? 'Capsule vàng sẵn sàng' : 'Capsule vàng đang chờ'}

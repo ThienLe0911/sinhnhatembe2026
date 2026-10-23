@@ -17,10 +17,20 @@
 }
 
 .count {
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: none;
   font-family: var(--font-display);
   font-size: var(--text-sm);
   font-weight: 600;
   color: var(--color-ink-muted);
+  text-align: left;
+  cursor: pointer;
+}
+
+.count:disabled {
+  cursor: default;
 }
 
 .countNumber {

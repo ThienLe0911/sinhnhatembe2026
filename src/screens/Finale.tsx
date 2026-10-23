@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { getAge, getCandleDigits } from '../content/content'
 import { getAudioManager } from '../lib/audio'
 import { startBlowDetection, type BlowDetection } from '../lib/blow'
+import { useReducedMotionPref } from '../lib/reduced-motion'
 import { Button } from '../ui/Button'
 import { Cake } from '../ui/Cake'
 import { Mascot, type MascotState } from '../ui/Mascot'
@@ -77,6 +78,7 @@ const MOOD: Record<Exclude<FinaleStage, 'letter'>, MascotState> = {
 export function Finale() {
   const audio = getAudioManager()
   const level = useMotionValue(0)
+  const reduced = useReducedMotionPref()
   const [stage, setStage] = useState<FinaleStage>('ready')
   const [canBlow, setCanBlow] = useState(false)
   const [showRead, setShowRead] = useState(false)
@@ -149,9 +151,15 @@ export function Finale() {
     tapping.current = true
     void audio.unlock()
     stopMic()
-    await animate(level, 1, { duration: 0.7, ease: 'easeIn' })
+    if (reduced) {
+      // Giảm chuyển động: không có đoạn lửa nghiêng dần, chỉ chờ chút rồi tắt
+      level.set(1)
+      await new Promise<void>((resolve) => window.setTimeout(resolve, 250))
+    } else {
+      await animate(level, 1, { duration: 0.7, ease: 'easeIn' })
+    }
     finish()
-  }, [audio, level, stopMic, finish])
+  }, [audio, level, stopMic, finish, reduced])
 
   if (stage === 'letter') {
     return (

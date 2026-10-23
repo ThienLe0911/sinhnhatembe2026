@@ -50,6 +50,15 @@ video {
 }
 
 /* Giảm chuyển động: giữ nội dung, bỏ hoạt hình lớn (AC-14). Motion tự xử lý phần transform qua MotionConfig. */
+:root[data-reduced-motion='true'] *,
+:root[data-reduced-motion='true'] *::before,
+:root[data-reduced-motion='true'] *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

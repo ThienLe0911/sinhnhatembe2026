@@ -9,6 +9,8 @@ const HOLD_MS = 650
 const MOVE_SLOP = 8
 // Một lần quay luôn kéo dài ít nhất từng này để kịp thấy các viên lắc lư
 const MIN_SPIN_MS = 1100
+// Khi giảm chuyển động chỉ chờ đủ để thấy dòng "Đang quay…", không có vòng quay dài
+const REDUCED_SPIN_MS = 450
 const TICK_DEG = 60
 
 const sleep = (ms: number) => new Promise<void>((resolve) => window.setTimeout(resolve, ms))
@@ -31,9 +33,18 @@ interface Options {
   /** Gọi mỗi TICK_DEG độ núm xoay, để phát tiếng lạch cạch. */
   onTick?: () => void
   label: string
+  /** Giảm chuyển động: núm nhảy thẳng tới vị trí cuối và lần quay ngắn hơn. */
+  reduced?: boolean
 }
 
-export function useKnobGesture({ enabled, angle, onSpinEnd, onTick, label }: Options) {
+export function useKnobGesture({
+  enabled,
+  angle,
+  onSpinEnd,
+  onTick,
+  label,
+  reduced = false,
+}: Options) {
   const [spinning, setSpinning] = useState(false)
   const [tracker] = useState(() => createKnobTracker())
   const spinningRef = useRef(false)
@@ -80,8 +91,12 @@ export function useKnobGesture({ enabled, angle, onSpinEnd, onTick, label }: Opt
     const from = angle.get()
     const to = Math.max(1, Math.ceil(from / 360)) * 360
     const startedAt = performance.now()
-    await animate(angle, to, { duration: 0.7 + ((to - from) / 360) * 0.7, ease: 'easeInOut' })
-    const rest = MIN_SPIN_MS - (performance.now() - startedAt)
+    if (reduced) {
+      angle.set(to)
+    } else {
+      await animate(angle, to, { duration: 0.7 + ((to - from) / 360) * 0.7, ease: 'easeInOut' })
+    }
+    const rest = (reduced ? REDUCED_SPIN_MS : MIN_SPIN_MS) - (performance.now() - startedAt)
     if (rest > 0) await sleep(rest)
     // 360 độ trông giống 0 độ nên đặt lại mà không thấy giật
     lastTick.current = 0
@@ -89,7 +104,7 @@ export function useKnobGesture({ enabled, angle, onSpinEnd, onTick, label }: Opt
     spinningRef.current = false
     if (mounted.current) setSpinning(false)
     onSpinEndRef.current()
-  }, [enabled, angle])
+  }, [enabled, angle, reduced])
 
   const knobProps: HTMLMotionProps<'div'> = {
     role: 'button',

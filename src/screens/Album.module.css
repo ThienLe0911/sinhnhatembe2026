@@ -1,0 +1,132 @@
+.screen {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  padding-block: var(--space-4) var(--space-6);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.mascot {
+  flex: none;
+  width: 5.5rem;
+}
+
+.heading {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  line-height: 1.1;
+  font-weight: 800;
+}
+
+.count {
+  font-size: var(--text-sm);
+  color: var(--color-ink-muted);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-3);
+}
+
+.cell {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  border: 0;
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-soft);
+  overflow: hidden;
+  text-align: center;
+  font: inherit;
+  color: inherit;
+}
+
+button.cell {
+  cursor: pointer;
+}
+
+.silver {
+  background: linear-gradient(160deg, #f8fafc, #dfe5ee 55%, #c3ccd9);
+  box-shadow:
+    0 0 0 2px #ffffff,
+    0 0 0 3px var(--color-silver-3),
+    var(--shadow-soft);
+}
+
+.locked {
+  justify-content: center;
+  background: var(--color-bg-deep);
+  box-shadow: inset 0 0 0 2px var(--color-line);
+}
+
+/* Viên capsule chưa mở mờ đi, vẫn gợi hạng của nó */
+.locked > :first-child {
+  opacity: 0.45;
+  filter: grayscale(0.4);
+}
+
+.thumb {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Tên thẻ nằm trên dải mờ ở đáy ô, đọc rõ cả khi có ảnh */
+.label {
+  position: relative;
+  z-index: 1;
+  width: calc(100% + 2 * var(--space-3));
+  margin: 0 calc(-1 * var(--space-3)) calc(-1 * var(--space-3));
+  padding: var(--space-2) var(--space-3);
+  background: rgb(255 253 248 / 0.88);
+  font-family: var(--font-display);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.locked .label {
+  background: none;
+  color: var(--color-ink-muted);
+  font-weight: 600;
+}
+
+.snippet {
+  position: relative;
+  z-index: 1;
+  display: -webkit-box;
+  -webkit-line-clamp: 6;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin-block: auto;
+  font-size: var(--text-sm);
+  line-height: 1.4;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+}

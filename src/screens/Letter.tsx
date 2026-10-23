@@ -2,6 +2,7 @@ import { motion } from 'motion/react'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { content } from '../content/content'
 import { getAudioManager } from '../lib/audio'
+import { useReducedMotionPref } from '../lib/reduced-motion'
 import { allVisible, splitGraphemes, visibleCounts, type TypewriterFrame } from '../lib/typewriter'
 import { useGameStore } from '../state/GameProvider'
 import { Button } from '../ui/Button'
@@ -21,6 +22,7 @@ const sameFrame = (a: TypewriterFrame, b: TypewriterFrame) =>
 
 export function Letter() {
   const store = useGameStore()
+  const reduced = useReducedMotionPref()
   const lines = useMemo(() => [...content.letter.paragraphs, content.letter.signature], [])
   const graphemes = useMemo(() => lines.map(splitGraphemes), [lines])
   const lengths = useMemo(() => graphemes.map((g) => g.length), [graphemes])
@@ -50,8 +52,8 @@ export function Letter() {
   const scrollStep = Math.floor(activeCount / SCROLL_EVERY_CHARS)
   useEffect(() => {
     if (frame.done) return
-    activeRef.current?.scrollIntoView({ block: 'center', behavior: 'smooth' })
-  }, [frame.activeIndex, scrollStep, frame.done])
+    activeRef.current?.scrollIntoView({ block: 'center', behavior: reduced ? 'auto' : 'smooth' })
+  }, [frame.activeIndex, scrollStep, frame.done, reduced])
 
   useEffect(() => {
     if (!frame.done) return

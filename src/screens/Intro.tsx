@@ -2,6 +2,7 @@ import { animate, motion, useMotionValue } from 'motion/react'
 import { useCallback, useRef, useState } from 'react'
 import { content } from '../content/content'
 import { getAudioManager } from '../lib/audio'
+import { useReducedMotionPref } from '../lib/reduced-motion'
 import { useGameStore } from '../state/GameProvider'
 import { GachaMachine } from '../ui/GachaMachine'
 import { Mascot, type MascotState } from '../ui/Mascot'
@@ -47,6 +48,7 @@ export function Intro() {
   const y = useMotionValue(0)
   const scale = useMotionValue(1)
   const opacity = useMotionValue(1)
+  const reduced = useReducedMotionPref()
   const [mood, setMood] = useState<MascotState>('idle')
   const [sheetOpen, setSheetOpen] = useState(false)
 
@@ -61,18 +63,27 @@ export function Intro() {
       // Tâm nghỉ của xu = tâm hiện tại trừ phần đã dịch chuyển
       const restX = coin.left + coin.width / 2 - x.get()
       const restY = coin.top + coin.height / 2 - y.get()
-      await Promise.all([
-        animate(x, slot.left + slot.width / 2 - restX, springs.soft),
-        animate(y, slot.top + slot.height / 2 - restY, springs.soft),
-        animate(scale, 0.4, { duration: 0.35 }),
-      ])
+      const toX = slot.left + slot.width / 2 - restX
+      const toY = slot.top + slot.height / 2 - restY
+      if (reduced) {
+        // Giảm chuyển động: xu nhảy thẳng vào khe thay vì bay
+        x.set(toX)
+        y.set(toY)
+        scale.set(0.4)
+      } else {
+        await Promise.all([
+          animate(x, toX, springs.soft),
+          animate(y, toY, springs.soft),
+          animate(scale, 0.4, { duration: 0.35 }),
+        ])
+      }
     }
     audio.sfx.play('coin')
     animate(opacity, 0, { duration: 0.12 })
     setMood('happy')
-    await sleep(500)
+    await sleep(reduced ? 250 : 500)
     store.dispatch({ type: 'INSERT_COIN' })
-  }, [audio, store, x, y, scale, opacity])
+  }, [audio, store, x, y, scale, opacity, reduced])
 
   const onDragEnd = useCallback(() => {
     const slot = slotRef.current?.getBoundingClientRect()

@@ -1,12 +1,14 @@
 import { motion } from 'motion/react'
 import { useMemo } from 'react'
 import type { Tier } from '../content/types'
+import { useReducedMotionPref } from '../lib/reduced-motion'
 import styles from './Burst.module.css'
 
 const COUNT = 14
 
 // Tia sáng và hạt lấp lánh bung ra từ giữa màn hình khi capsule bật nắp
 export function Burst({ tier }: { tier: Tier }) {
+  const reduced = useReducedMotionPref()
   const particles = useMemo(
     () =>
       Array.from({ length: COUNT }, (_, i) => {
@@ -26,11 +28,12 @@ export function Burst({ tier }: { tier: Tier }) {
     <div className={`${styles.burst} ${styles[tier]}`} aria-hidden="true">
       <motion.div
         className={styles.glow}
-        initial={{ scale: 0.2, opacity: 0.95 }}
-        animate={{ scale: 3.4, opacity: 0 }}
+        initial={reduced ? { opacity: 0.8 } : { scale: 0.2, opacity: 0.95 }}
+        animate={reduced ? { opacity: 0 } : { scale: 3.4, opacity: 0 }}
         transition={{ duration: 0.95, ease: 'easeOut' }}
       />
-      {particles.map((p, i) => (
+      {/* Giảm chuyển động: chỉ còn vầng sáng mờ dần, bỏ các hạt bay */}
+      {(reduced ? [] : particles).map((p, i) => (
         <motion.span
           key={i}
           className={styles.spark}

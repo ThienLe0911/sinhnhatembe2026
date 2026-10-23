@@ -3,6 +3,7 @@ import { useEffect, useRef, useState, type PointerEvent } from 'react'
 import type { Capsule, Tier } from '../content/types'
 import { getAudioManager } from '../lib/audio'
 import { resolveAudio, resolveMedia } from '../lib/media'
+import { useReducedMotionPref } from '../lib/reduced-motion'
 import { Burst } from '../ui/Burst'
 import { Button } from '../ui/Button'
 import { springs } from '../ui/motion'
@@ -30,6 +31,7 @@ function PhotoPairBody({
   title: string
 }) {
   const [flipped, setFlipped] = useState(false)
+  const reduced = useReducedMotionPref()
   return (
     <figure className={styles.figure}>
       <button
@@ -39,18 +41,30 @@ function PhotoPairBody({
         aria-pressed={flipped}
         aria-label="Lật ảnh"
       >
-        <motion.div
-          className={styles.flipInner}
-          animate={{ rotateY: flipped ? 180 : 0 }}
-          transition={springs.soft}
-        >
-          <div className={styles.face}>
-            <Photo name={images?.[0]} alt={`${title}, mặt trước`} />
+        {reduced ? (
+          // Giảm chuyển động: đổi ảnh thẳng, không lật 3D
+          <div className={styles.flipInner}>
+            <div className={styles.face}>
+              <Photo
+                name={images?.[flipped ? 1 : 0]}
+                alt={`${title}, mặt ${flipped ? 'sau' : 'trước'}`}
+              />
+            </div>
           </div>
-          <div className={`${styles.face} ${styles.back}`}>
-            <Photo name={images?.[1]} alt={`${title}, mặt sau`} />
-          </div>
-        </motion.div>
+        ) : (
+          <motion.div
+            className={styles.flipInner}
+            animate={{ rotateY: flipped ? 180 : 0 }}
+            transition={springs.soft}
+          >
+            <div className={styles.face}>
+              <Photo name={images?.[0]} alt={`${title}, mặt trước`} />
+            </div>
+            <div className={`${styles.face} ${styles.back}`}>
+              <Photo name={images?.[1]} alt={`${title}, mặt sau`} />
+            </div>
+          </motion.div>
+        )}
       </button>
       <figcaption className={styles.caption}>{caption}</figcaption>
       <p className={styles.hint}>Chạm vào ảnh để lật</p>
@@ -182,7 +196,7 @@ function CardBody({ capsule }: { capsule: Capsule }) {
 }
 
 // Hologram hạng Bạc: ánh kim và độ nghiêng theo ngón tay kéo (không dùng cảm biến nghiêng máy)
-function useHolo(enabled: boolean) {
+function useHolo(enabled: boolean, tilt: boolean) {
   const px = useMotionValue(0)
   const py = useMotionValue(0)
   const spring = { stiffness: 180, damping: 22, mass: 0.8 }
@@ -206,7 +220,12 @@ function useHolo(enabled: boolean) {
     : {}
 
   const style = enabled
-    ? ({ rotateX, rotateY, transformPerspective: 900, '--mx': mx, '--my': my } as MotionStyle)
+    ? ({
+        // Giảm chuyển động: bỏ độ nghiêng 3D, vẫn giữ ánh kim đổi màu theo ngón tay
+        ...(tilt ? { rotateX, rotateY, transformPerspective: 900 } : {}),
+        '--mx': mx,
+        '--my': my,
+      } as MotionStyle)
     : undefined
   return { handlers, style }
 }
@@ -214,11 +233,21 @@ function useHolo(enabled: boolean) {
 interface MemoryCardProps {
   capsule: Capsule
   onClose: () => void
+  /** Chữ trên nút đóng: "Cất vào album" lúc vừa mở capsule, "Đóng" khi xem lại trong album. */
+  closeLabel?: string
+  /** Tia sáng bung ra khi thẻ xuất hiện; tắt khi xem lại trong album. */
+  celebrate?: boolean
 }
 
-export function MemoryCard({ capsule, onClose }: MemoryCardProps) {
+export function MemoryCard({
+  capsule,
+  onClose,
+  closeLabel = 'Cất vào album',
+  celebrate = true,
+}: MemoryCardProps) {
   const silver = capsule.tier === 'silver'
-  const holo = useHolo(silver)
+  const reduced = useReducedMotionPref()
+  const holo = useHolo(silver, !reduced)
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -236,7 +265,7 @@ export function MemoryCard({ capsule, onClose }: MemoryCardProps) {
       exit={{ opacity: 0 }}
       transition={{ duration: 0.25 }}
     >
-      <Burst tier={capsule.tier} />
+      {celebrate ? <Burst tier={capsule.tier} /> : null}
       <motion.article
         role="dialog"
         aria-modal="true"
@@ -257,7 +286,7 @@ export function MemoryCard({ capsule, onClose }: MemoryCardProps) {
           <CardBody capsule={capsule} />
         </div>
         <Button onClick={onClose} autoFocus>
-          Cất vào album
+          {closeLabel}
         </Button>
         {silver ? <div className={styles.foil} aria-hidden="true" /> : null}
       </motion.article>

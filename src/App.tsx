@@ -1,18 +1,21 @@
 import { AnimatePresence, motion } from 'motion/react'
-import { lazy, Suspense, useState, type ComponentType } from 'react'
+import { lazy, Suspense, useEffect, useState, type ComponentType } from 'react'
 import { content } from './content/content'
 import { createClock } from './lib/clock'
+import { preloadCardMedia } from './lib/preload'
 import { hasPreviewParam, isUnlocked } from './lib/time'
+import { Album } from './screens/Album'
 import { Countdown } from './screens/Countdown'
 import { Finale } from './screens/Finale'
 import { Intro } from './screens/Intro'
 import { Play } from './screens/Play'
-import { getBrowserStorage } from './state/progress-storage'
 import { GameProvider, useGameState } from './state/GameProvider'
+import { getBrowserStorage } from './state/progress-storage'
 import { createGameStore } from './state/store'
-import { Stage } from './ui/Stage'
+import { ErrorBoundary } from './ui/ErrorBoundary'
 
-// Các trang xem thử chỉ có ở môi trường phát triển (?tile, ?mascot, ?machine), không vào bản build phát hành.
+// Các trang xem thử chỉ có ở môi trường phát triển (?tile, ?mascot, ?machine, ?cards),
+// không vào bản build phát hành.
 const devPages: Record<string, ComponentType> = import.meta.env.DEV
   ? {
       tile: lazy(() => import('./dev/StyleTile')),
@@ -21,17 +24,13 @@ const devPages: Record<string, ComponentType> = import.meta.env.DEV
       cards: lazy(() => import('./dev/CardSheet')),
     }
   : {}
-const devPage = import.meta.env.DEV
-  ? Object.keys(devPages).find((name) => new URLSearchParams(window.location.search).has(name))
-  : undefined
+const devParams = import.meta.env.DEV ? new URLSearchParams(window.location.search) : null
+const devPage = devParams ? Object.keys(devPages).find((name) => devParams.has(name)) : undefined
+// ?crash giả lập một màn bị lỗi để thử màn dự phòng (chỉ môi trường phát triển)
+const simulateCrash = devParams?.has('crash') ?? false
 
-// Màn chưa làm: finale (T16, T17) và album (T18)
-function Soon({ name }: { name: string }) {
-  return (
-    <Stage>
-      <p>{name} đang được dựng…</p>
-    </Stage>
-  )
+function CrashProbe(): null {
+  throw new Error('Lỗi giả lập bằng ?crash')
 }
 
 function Screens({ now }: { now: () => number }) {
@@ -49,7 +48,8 @@ function Screens({ now }: { now: () => number }) {
         {screen === 'INTRO' ? <Intro /> : null}
         {screen === 'PLAY' ? <Play /> : null}
         {screen === 'FINALE' ? <Finale /> : null}
-        {screen === 'ALBUM' ? <Soon name="Album" /> : null}
+        {screen === 'ALBUM' ? <Album /> : null}
+        {simulateCrash && screen === 'PLAY' ? <CrashProbe /> : null}
       </motion.div>
     </AnimatePresence>
   )
@@ -70,6 +70,13 @@ function Game() {
       }),
     }
   })
+
+  // Tải trước ảnh của thẻ đầu tiên để lần mở thẻ đầu không bị chờ
+  useEffect(() => {
+    const first = content.capsules.find((c) => c.card.kind !== 'finale')
+    if (first) preloadCardMedia(first.card)
+  }, [])
+
   return (
     <GameProvider store={store}>
       <Screens now={now} />
@@ -86,5 +93,9 @@ export function App() {
       </Suspense>
     )
   }
-  return <Game />
+  return (
+    <ErrorBoundary>
+      <Game />
+    </ErrorBoundary>
+  )
 }
