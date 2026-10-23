@@ -1,0 +1,22 @@
+.cake {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+/* Ngọn lửa rung nhẹ khi chưa bị thổi */
+.flicker {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: flicker 0.22s ease-in-out infinite alternate;
+}
+
+@keyframes flicker {
+  from {
+    transform: scale(1, 1);
+  }
+  to {
+    transform: scale(0.94, 1.08);
+  }
+}

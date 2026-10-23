@@ -1,0 +1,36 @@
+.burst {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  --glow: var(--color-peach-strong);
+  --spark: var(--color-butter);
+}
+
+.silver {
+  --glow: var(--color-silver-2);
+  --spark: #ffffff;
+}
+
+.gold {
+  --glow: var(--color-gold-2);
+  --spark: var(--color-gold-1);
+}
+
+.glow,
+.spark {
+  grid-area: 1 / 1;
+  border-radius: 50%;
+}
+
+.glow {
+  width: 14rem;
+  height: 14rem;
+  background: radial-gradient(circle, var(--glow) 0%, transparent 68%);
+}
+
+.spark {
+  background: var(--spark);
+  box-shadow: 0 0 10px 2px var(--glow);
+}

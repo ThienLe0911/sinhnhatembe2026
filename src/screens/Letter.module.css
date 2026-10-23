@@ -1,0 +1,111 @@
+.screen {
+  /* Chiều cao cố định theo màn hình: thư tự cuộn bên trong, cả trang không cuộn */
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding-block: var(--space-3) var(--space-2);
+  /* Cao đúng bằng phần còn lại của màn hình để thư tự cuộn bên trong */
+  height: calc(
+    100dvh - 2 * var(--space-4) - env(safe-area-inset-top) - env(safe-area-inset-bottom)
+  );
+}
+
+.top {
+  flex: none;
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-3);
+  min-height: 7rem;
+}
+
+.mascot {
+  flex: none;
+  width: 7.5rem;
+}
+
+.whisper {
+  position: relative;
+  margin-bottom: var(--space-5);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md) var(--radius-md) var(--radius-md) var(--space-1);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-soft);
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.paper {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: var(--space-5) var(--space-4);
+  border-radius: var(--radius-lg);
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      transparent 0,
+      transparent 1.74rem,
+      rgb(234 223 214 / 0.55) 1.74rem,
+      rgb(234 223 214 / 0.55) calc(1.74rem + 1px)
+    ),
+    var(--color-surface);
+  box-shadow: var(--shadow-clay);
+  cursor: pointer;
+}
+
+.line {
+  margin: 0 0 var(--space-4);
+  font-size: 1.0625rem;
+  line-height: 1.75rem;
+}
+
+.greeting {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: 800;
+}
+
+.closing {
+  margin-bottom: var(--space-2);
+  font-family: var(--font-display);
+  font-weight: 700;
+}
+
+.signature {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-style: italic;
+  font-weight: 800;
+  color: var(--color-matcha-ink);
+}
+
+/* Phần chữ chưa gõ vẫn chiếm chỗ để thư không nhảy bố cục */
+.ghost {
+  visibility: hidden;
+}
+
+.footer {
+  flex: none;
+  min-height: 3.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hint {
+  font-size: var(--text-sm);
+  color: var(--color-ink-muted);
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

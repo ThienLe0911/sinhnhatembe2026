@@ -4,6 +4,7 @@ import { content } from './content/content'
 import { createClock } from './lib/clock'
 import { hasPreviewParam, isUnlocked } from './lib/time'
 import { Countdown } from './screens/Countdown'
+import { Finale } from './screens/Finale'
 import { Intro } from './screens/Intro'
 import { Play } from './screens/Play'
 import { getBrowserStorage } from './state/progress-storage'
@@ -17,6 +18,7 @@ const devPages: Record<string, ComponentType> = import.meta.env.DEV
       tile: lazy(() => import('./dev/StyleTile')),
       mascot: lazy(() => import('./dev/MascotSheet')),
       machine: lazy(() => import('./dev/MachineSheet')),
+      cards: lazy(() => import('./dev/CardSheet')),
     }
   : {}
 const devPage = import.meta.env.DEV
@@ -46,7 +48,7 @@ function Screens({ now }: { now: () => number }) {
         {screen === 'COUNTDOWN' ? <Countdown now={now} /> : null}
         {screen === 'INTRO' ? <Intro /> : null}
         {screen === 'PLAY' ? <Play /> : null}
-        {screen === 'FINALE' ? <Soon name="Màn thổi nến" /> : null}
+        {screen === 'FINALE' ? <Finale /> : null}
         {screen === 'ALBUM' ? <Soon name="Album" /> : null}
       </motion.div>
     </AnimatePresence>
