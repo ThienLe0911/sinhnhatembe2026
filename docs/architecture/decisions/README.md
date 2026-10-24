@@ -4,6 +4,6 @@ Mỗi ADR nằm tại `docs/architecture/decisions/NNN-*.md`. Chỉ chủ dự �
 
 | Số | Tiêu đề | Trạng thái |
 | --- | --- | --- |
-| — | Chưa có ADR. | — |
+| 001 | [Trang phụ dùng nhiều điểm vào (multi-page) thay cho router](001-trang-phu-nhieu-diem-vao.md) | Accepted |
 
-Ghi chú: dự án chỉ có một feature (`birthday-gacha`), nên các đề xuất kỹ thuật hiện nằm trong mục "Quyết định kỹ thuật đề xuất" của `docs/features/birthday-gacha/spec.md` và được duyệt cùng spec.
+Ghi chú: các quyết định chỉ ảnh hưởng một feature nằm trong mục "Quyết định kỹ thuật" của spec feature đó (ví dụ `docs/features/birthday-gacha/spec.md`) và được duyệt cùng spec.
