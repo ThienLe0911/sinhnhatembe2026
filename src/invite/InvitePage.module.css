@@ -36,6 +36,11 @@
   text-wrap: balance;
 }
 
+/* Tiêu đề chỉ nhận focus bằng mã khi đổi bước, không cần vòng viền */
+.title:focus {
+  outline: none;
+}
+
 .subtitle {
   font-family: var(--font-display);
   font-size: var(--text-lg);

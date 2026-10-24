@@ -3,6 +3,8 @@ import type { InviteContent } from './content'
 const TIME = /^([01]\d|2[0-3]):[0-5]\d$/
 const DATE = /^\d{4}-\d{2}-\d{2}$/
 const LINK = /^(https:\/\/|tel:|sms:)/
+// "22 tuổi", "lần thứ 22": mọi chỗ ghi tuổi phải bằng content.age (BR-I09)
+const AGE_MENTION = /(\d+)\s*tuổi|lần thứ\s*(\d+)/gi
 
 export interface InviteValidateResult {
   ok: boolean
@@ -34,7 +36,18 @@ function collectStrings(content: InviteContent): Array<[string, string]> {
     ['calendar.title', content.calendar.title],
     ['share.title', content.share.title],
     ['share.text', content.share.text],
+    ['intro.heading', content.intro.heading],
+    ['intro.next', content.intro.next],
+    ['intro.skip', content.intro.skip],
+    ['reveal.lead', content.reveal.lead],
+    ['reveal.iconHint', content.reveal.iconHint],
+    ['reveal.iconLabel', content.reveal.iconLabel],
+    ['reveal.line', content.reveal.line],
+    ['reveal.nextHint', content.reveal.nextHint],
+    ['reveal.nextLabel', content.reveal.nextLabel],
+    ['reveal.skip', content.reveal.skip],
   ]
+  content.intro.bubbles.forEach((text, i) => out.push([`intro.bubbles[${i}]`, text]))
   content.timeline.forEach((step, i) => out.push([`timeline[${i}].text`, step.text]))
   if (content.rsvp) out.push(['rsvp.label', content.rsvp.label])
   if (content.confidentialNote) out.push(['confidentialNote', content.confidentialNote])
@@ -82,6 +95,28 @@ export function validateInvite(
     if (!step.text.trim()) errors.push(`${where}: chữ đang trống`)
     previousEnd = minutes(step.to)
   })
+
+  if (!Number.isInteger(content.age) || content.age < 1) errors.push('age phải là số nguyên dương')
+  for (const [path, value] of collectStrings(content)) {
+    for (const match of value.matchAll(AGE_MENTION)) {
+      const mentioned = Number(match[1] ?? match[2])
+      if (mentioned !== content.age) {
+        errors.push(`${path}: ghi ${mentioned} tuổi nhưng age là ${content.age}`)
+      }
+    }
+  }
+
+  if (content.intro.bubbles.length === 0) errors.push('intro.bubbles đang trống')
+  content.intro.bubbles.forEach((text, i) => {
+    if (!text.trim()) errors.push(`intro.bubbles[${i}]: chữ đang trống`)
+  })
+  for (const [path, value] of collectStrings(content)) {
+    if (path.startsWith('intro.') || path.startsWith('reveal.')) {
+      if (!value.trim()) errors.push(`${path}: chữ đang trống`)
+      // BR-I06, BR-I10: hai trang dẫn không nhắc tới quà hay bất ngờ
+      if (/quà|bất ngờ/i.test(value)) errors.push(`${path}: không được nhắc tới quà hay bất ngờ`)
+    }
+  }
 
   if (content.rsvp && !LINK.test(content.rsvp.href)) {
     errors.push('rsvp.href phải bắt đầu bằng https://, tel: hoặc sms:')

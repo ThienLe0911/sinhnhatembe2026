@@ -90,3 +90,86 @@ export function StepArt({ icons }: { icons: InviteIcon[] }) {
     </span>
   )
 }
+
+// Icon bí mật của Trang 2: bóng bay có dấu "?" (không dùng hộp quà, BR-I10). Chạm thì "bụp" ra bánh sinh nhật.
+export function SecretBalloon() {
+  return (
+    <svg viewBox="0 0 120 120" width="100%" height="100%" aria-hidden="true">
+      <path
+        d="M60 94c-4 8 5 12 0 24"
+        fill="none"
+        stroke="#9a8fa0"
+        strokeWidth="2.5"
+        strokeLinecap="round"
+      />
+      <path d="M60 86l-7 10h14z" fill="#8f7fdc" />
+      <ellipse cx="60" cy="50" rx="35" ry="41" fill="#b4a5ee" />
+      <ellipse
+        cx="45"
+        cy="33"
+        rx="9"
+        ry="14"
+        fill="#fff"
+        opacity="0.35"
+        transform="rotate(25 45 33)"
+      />
+      <path
+        d="M49 40c0-8 5-12 11-12 7 0 11 5 11 11 0 6-5 8-9 11-2 1.5-2 3-2 6"
+        fill="none"
+        stroke="#fff"
+        strokeWidth="6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <circle cx="60" cy="72" r="3.6" fill="#fff" />
+    </svg>
+  )
+}
+
+export function SecretCake() {
+  return (
+    <svg viewBox="0 0 120 120" width="100%" height="100%" aria-hidden="true">
+      <ellipse cx="60" cy="106" rx="46" ry="7" fill="#e8dccb" />
+      <rect
+        x="22"
+        y="70"
+        width="76"
+        height="34"
+        rx="10"
+        fill="#ffd9cf"
+        stroke="#f2a193"
+        strokeWidth="2"
+      />
+      <path d="M22 76h76v6q-9.5 10-19 0q-9.5 10-19 0q-9.5 10-19 0q-9.5 10-19 0z" fill="#fffdf8" />
+      <circle cx="36" cy="94" r="2.8" fill="#b4a5ee" />
+      <circle cx="54" cy="97" r="2.8" fill="#8fba7a" />
+      <circle cx="72" cy="94" r="2.8" fill="#b4a5ee" />
+      <circle cx="88" cy="97" r="2.8" fill="#8fba7a" />
+      <rect
+        x="36"
+        y="48"
+        width="48"
+        height="26"
+        rx="8"
+        fill="#fbeab4"
+        stroke="#e9bb52"
+        strokeWidth="2"
+      />
+      <path d="M36 54h48v4q-8 8-16 0q-8 8-16 0q-8 8-16 0z" fill="#fffdf8" />
+      <rect
+        x="57"
+        y="30"
+        width="6"
+        height="19"
+        rx="2"
+        fill="#d3e7c3"
+        stroke="#8fba7a"
+        strokeWidth="1.5"
+      />
+      <g data-flame>
+        <path d="M60 12q10 9 0 18q-10-9 0-18z" fill="#f5b53a" />
+        <path d="M60 19q4.5 4.5 0 9q-4.5-4.5 0-9z" fill="#fff1b8" />
+      </g>
+    </svg>
+  )
+}

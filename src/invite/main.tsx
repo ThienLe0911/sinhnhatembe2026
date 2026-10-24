@@ -5,7 +5,7 @@ import { ErrorBoundary } from '../ui/ErrorBoundary'
 import { MotionProvider } from '../ui/MotionProvider'
 import '../ui/tokens.css'
 import '../ui/base.css'
-import { InvitePage } from './InvitePage'
+import { InviteFlow } from './InviteFlow'
 
 syncReducedMotionAttribute()
 
@@ -16,7 +16,7 @@ createRoot(document.getElementById('root')!).render(
         title="Trang mời chưa mở được"
         body="Bạn tải lại trang giúp mình nhé. Nếu vẫn lỗi, hãy mở link trong Safari hoặc Chrome."
       >
-        <InvitePage />
+        <InviteFlow />
       </ErrorBoundary>
     </MotionProvider>
   </StrictMode>,

@@ -2,7 +2,6 @@ import { motion } from 'motion/react'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Button } from '../ui/Button'
 import { Mascot } from '../ui/Mascot'
-import { springs } from '../ui/motion'
 import { Stage } from '../ui/Stage'
 import { browserCopyDeps, browserShare, copyText, downloadTextFile, shareInvite } from './actions'
 import {
@@ -14,19 +13,13 @@ import {
   mapsUrl,
 } from './calendar'
 import { inviteContent, type InviteContent } from './content'
+import { enter } from './enter'
 import { InfoIcon, StepArt } from './icons'
 import styles from './InvitePage.module.css'
 import { LinkButton } from './LinkButton'
 import { isValidDate } from './validate'
 
 const NOTICE_MS = 2400
-
-// Mỗi khối hiện lên lần lượt; MotionProvider tự bỏ phần dịch chuyển khi bật giảm chuyển động
-const enter = (index: number) => ({
-  initial: { opacity: 0, y: 18 },
-  animate: { opacity: 1, y: 0 },
-  transition: { ...springs.soft, delay: 0.08 * index },
-})
 
 export function InvitePage({ content = inviteContent }: { content?: InviteContent }) {
   const [notice, setNotice] = useState<string | null>(null)

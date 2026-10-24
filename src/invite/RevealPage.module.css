@@ -1,0 +1,173 @@
+.page {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4);
+  padding-block: var(--space-4) var(--space-5);
+  text-align: center;
+}
+
+.heading {
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  line-height: 1.15;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+
+/* Tiêu đề chỉ nhận focus bằng mã khi đổi bước, không cần vòng viền */
+.heading:focus {
+  outline: none;
+}
+
+.center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+/* Vùng chạm lớn (≥ 64px); phần hình nhỏ hơn nằm bên trong */
+.secret {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 9.5rem;
+  height: 9.5rem;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+/* Vòng sáng lan ra, nhắc người xem bấm vào */
+.halo {
+  position: absolute;
+  inset: 0.75rem;
+  border-radius: 50%;
+  background: var(--color-lavender);
+  animation: halo 2.2s ease-out infinite;
+}
+
+.icon {
+  position: relative;
+  display: block;
+  width: 8rem;
+  height: 8rem;
+  animation: bob 3.2s ease-in-out infinite;
+}
+
+.icon[data-opened='true'] {
+  animation: none;
+}
+
+.swap {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.icon [data-flame] {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: flicker 1.1s ease-in-out infinite;
+}
+
+.sparks {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+}
+
+.spark {
+  grid-area: 1 / 1;
+  width: 18px;
+  height: 18px;
+}
+
+.hint {
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: var(--color-ink-muted);
+}
+
+/* Chừa sẵn chỗ để lời hé lộ hiện ra không làm trang nhảy */
+.speech {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  min-height: 4.5rem;
+}
+
+.bubble {
+  position: relative;
+  padding: var(--space-3) var(--space-5);
+  border-radius: var(--radius-lg);
+  background: var(--color-butter);
+  box-shadow: var(--shadow-clay);
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: 800;
+  line-height: 1.2;
+  text-wrap: balance;
+}
+
+/* Mũi nhọn chỉ xuống linh vật */
+.bubble::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: -7px;
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  background: inherit;
+  transform: translateX(-50%) rotate(45deg);
+}
+
+.mascot {
+  width: min(44%, 9.5rem);
+}
+
+.actions {
+  display: flex;
+  justify-content: center;
+}
+
+@keyframes bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes halo {
+  0% {
+    transform: scale(0.8);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(1.25);
+    opacity: 0;
+  }
+}
+
+@keyframes flicker {
+  0%,
+  100% {
+    transform: scale(1, 1);
+  }
+  50% {
+    transform: scale(0.9, 1.1);
+  }
+}

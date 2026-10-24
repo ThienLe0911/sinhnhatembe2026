@@ -40,8 +40,15 @@ describe('InvitePage', () => {
   })
 
   it('chưa có ngày thì ẩn khối thêm vào lịch', () => {
-    expect(html).not.toContain('Thêm vào lịch')
-    expect(html).not.toContain('calendar.google.com')
+    const pending = render({ ...inviteContent, date: '[Ngày diễn ra buổi tiệc]' })
+    expect(pending).not.toContain('Thêm vào lịch')
+    expect(pending).not.toContain('calendar.google.com')
+  })
+
+  it('nội dung thật có ngày 25/10/2026 (Chủ nhật) và khối thêm vào lịch', () => {
+    expect(html).toContain('Chủ nhật, 25/10/2026')
+    expect(html).toContain('Thêm vào lịch')
+    expect(html).toContain('dates=20261025T113000Z/20261025T150000Z')
   })
 
   it('có ngày hợp lệ thì hiện Google Calendar, file .ics và thứ trong tuần', () => {

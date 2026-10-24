@@ -1,3 +1,5 @@
+/// <reference types="node" />
+import { readFileSync } from 'node:fs'
 import { describe, expect, it } from 'vitest'
 import { inviteContent, type InviteContent } from './content'
 import { isValidDate, validateInvite } from './validate'
@@ -33,12 +35,19 @@ describe('nội dung trang mời (nguyên văn của chủ dự án)', () => {
 })
 
 describe('validateInvite', () => {
+  const PENDING = withDate('[Ngày diễn ra buổi tiệc]')
+
+  it('nội dung sắp phát hành qua chế độ nghiêm ngặt (không còn ngoặc vuông, có ngày)', () => {
+    expect(validateInvite(inviteContent, { strict: true })).toEqual({ ok: true, errors: [] })
+    expect(inviteContent.date).toBe('2026-10-25')
+  })
+
   it('chế độ thường cho qua khi còn chờ ngày', () => {
-    expect(validateInvite(inviteContent, { strict: false }).ok).toBe(true)
+    expect(validateInvite(PENDING, { strict: false }).ok).toBe(true)
   })
 
   it('chế độ nghiêm ngặt chặn khi chưa có ngày hoặc còn ngoặc vuông', () => {
-    const result = validateInvite(inviteContent, { strict: true })
+    const result = validateInvite(PENDING, { strict: true })
     expect(result.ok).toBe(false)
     expect(result.errors.join(' ')).toContain('date')
   })
@@ -94,5 +103,72 @@ describe('validateInvite', () => {
     expect(ok('sms:+84900000000')).toBe(true)
     expect(ok('javascript:alert(1)')).toBe(false)
     expect(ok('http://zalo.me/x')).toBe(false)
+  })
+})
+
+describe('hai trang dẫn (v2)', () => {
+  it('giữ đúng chữ của chủ dự án ở Trang 1 và Trang 2', () => {
+    expect(inviteContent.intro.bubbles).toEqual([
+      '22 tuổi',
+      'Đẹp gái',
+      'Công tác tại Shopee',
+      'Thích cầu lông và thể thao',
+      'Vui vẻ, hoạt bát',
+      'Đôi khi hơi ngơ xíu hoy',
+    ])
+    expect(inviteContent.intro.heading).toBe('Xin giới thiệu: em bé Minh Thư')
+    expect(inviteContent.reveal.lead).toBe('Và sắp tới sẽ là một sự kiện trọng đại')
+    expect(inviteContent.reveal.line).toBe('Là sinh nhật của mình đó')
+  })
+
+  it('không nhắc tới quà hay bất ngờ và không có số điện thoại (BR-I06, I07, I10)', () => {
+    const text = JSON.stringify([inviteContent.intro, inviteContent.reveal]).toLowerCase()
+    expect(text).not.toMatch(/quà|bất ngờ|capsule|gacha/)
+    expect(text).not.toMatch(/\d{9,}/)
+  })
+
+  it('tuổi chỉ có một nguồn và khớp ở mọi nơi (BR-I09)', () => {
+    expect(inviteContent.age).toBe(22)
+    expect(inviteContent.subtitle).toBe('Sinh nhật lần thứ 22')
+    expect(inviteContent.calendar.title).toContain('(22 tuổi)')
+    expect(inviteContent.share.text).toContain('lần thứ 22')
+    expect(inviteContent.intro.bubbles[0]).toBe('22 tuổi')
+  })
+
+  it('thẻ meta trong moi/index.html khớp tuổi', () => {
+    const html = readFileSync(new URL('../../moi/index.html', import.meta.url), 'utf8')
+    const ages = [...html.matchAll(/lần thứ\s*(\d+)/gi)].map((m) => Number(m[1]))
+    expect(ages.length).toBeGreaterThan(0)
+    for (const age of ages) expect(age).toBe(inviteContent.age)
+  })
+
+  it('bị từ chối khi tuổi lệch, khi nhắc tới quà hoặc khi bong bóng trống', () => {
+    const mismatched = validateInvite(
+      { ...inviteContent, intro: { ...inviteContent.intro, bubbles: ['27 tuổi'] } },
+      { strict: false },
+    )
+    expect(mismatched.ok).toBe(false)
+    expect(mismatched.errors.join(' ')).toContain('27')
+
+    const gift = validateInvite(
+      { ...inviteContent, reveal: { ...inviteContent.reveal, line: 'Có quà nè' } },
+      { strict: false },
+    )
+    expect(gift.ok).toBe(false)
+
+    const empty = validateInvite(
+      { ...inviteContent, intro: { ...inviteContent.intro, bubbles: ['Đẹp gái', ' '] } },
+      { strict: false },
+    )
+    expect(empty.ok).toBe(false)
+  })
+
+  it('chế độ nghiêm ngặt chặn ngoặc vuông ở hai trang dẫn', () => {
+    const result = validateInvite(
+      { ...inviteContent, reveal: { ...inviteContent.reveal, lead: 'Và sắp tới [chờ chữ]' } },
+      { strict: true },
+    )
+    expect(result.ok).toBe(false)
+    expect(result.errors.join(' ')).toContain('reveal.lead')
   })
 })

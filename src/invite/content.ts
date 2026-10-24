@@ -11,7 +11,32 @@ export interface InviteStep {
   icons: InviteIcon[]
 }
 
+/** Trang 1: linh vật ở giữa, các bong bóng giới thiệu bao quanh (FR-I15). */
+export interface InviteIntro {
+  heading: string
+  bubbles: string[]
+  next: string
+  skip: string
+}
+
+/** Trang 2: câu dẫn, icon bí mật, lời hé lộ của Thư (FR-I16). */
+export interface InviteReveal {
+  lead: string
+  iconHint: string
+  /** Nhãn cho trình đọc màn hình của icon bí mật khi chưa mở. */
+  iconLabel: string
+  line: string
+  nextHint: string
+  /** Nhãn cho trình đọc màn hình của nút sau khi đã hé lộ. */
+  nextLabel: string
+  skip: string
+}
+
 export interface InviteContent {
+  /** Tuổi của Thư: nguồn duy nhất, mọi chỗ ghi tuổi phải khớp (BR-I09). */
+  age: number
+  intro: InviteIntro
+  reveal: InviteReveal
   title: string
   subtitle: string
   /** Ngày diễn ra, dạng YYYY-MM-DD. Còn ngoặc vuông nghĩa là chưa có ngày. */
@@ -29,10 +54,35 @@ export interface InviteContent {
   share: { title: string; text: string }
 }
 
+const AGE = 22
+
 export const inviteContent: InviteContent = {
+  age: AGE,
+  intro: {
+    heading: 'Xin giới thiệu: em bé Minh Thư',
+    bubbles: [
+      `${AGE} tuổi`,
+      'Đẹp gái',
+      'Công tác tại Shopee',
+      'Thích cầu lông và thể thao',
+      'Vui vẻ, hoạt bát',
+      'Đôi khi hơi ngơ xíu hoy',
+    ],
+    next: 'Tiếp theo',
+    skip: 'Bỏ qua',
+  },
+  reveal: {
+    lead: 'Và sắp tới sẽ là một sự kiện trọng đại',
+    iconHint: 'Chạm vào biểu tượng bí mật',
+    iconLabel: 'Biểu tượng bí mật, chạm để mở',
+    line: 'Là sinh nhật của mình đó',
+    nextHint: 'Chạm để xem lời mời',
+    nextLabel: 'Xem lời mời',
+    skip: 'Bỏ qua',
+  },
   title: 'Mời bạn đến dự sinh nhật của em bé Minh Thư',
-  subtitle: 'Sinh nhật lần thứ 22',
-  date: '[Ngày diễn ra buổi tiệc]',
+  subtitle: `Sinh nhật lần thứ ${AGE}`,
+  date: '2026-10-25',
   start: '18:30',
   end: '22:00',
   venue: {
@@ -49,9 +99,9 @@ export const inviteContent: InviteContent = {
     },
   ],
   closing: 'Hãy tham gia và cùng tạo kỉ niệm đáng nhớ với em bé Minh Thư nhé',
-  calendar: { title: 'Sinh nhật em bé Minh Thư (22 tuổi)' },
+  calendar: { title: `Sinh nhật em bé Minh Thư (${AGE} tuổi)` },
   share: {
     title: 'Lời mời sinh nhật em bé Minh Thư',
-    text: 'Mời bạn đến dự sinh nhật lần thứ 22 của em bé Minh Thư nhé!',
+    text: `Mời bạn đến dự sinh nhật lần thứ ${AGE} của em bé Minh Thư nhé!`,
   },
 }
